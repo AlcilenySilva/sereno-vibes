@@ -6,8 +6,9 @@ export default function Login({ navigation }) {
   const [senha, setSenha] = useState('');
 
   const handleLogin = () => {
-    console.log('Login:', email, senha);
-  };
+  console.log('Login:', email, senha);
+  navigation.navigate('Tabs'); 
+};
 
   const handleCadastro = () => {
     console.log('Cadastro');
@@ -60,8 +61,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center', // centraliza verticalmente
-    alignItems: 'center',     // centraliza horizontalmente
+    justifyContent: 'center', 
+    alignItems: 'center',     
     paddingHorizontal: 20,
   },
   logo: {

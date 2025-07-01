@@ -9,14 +9,14 @@ export default function Principal({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Faixa lilás superior */}
+     
       <View style={styles.topBar}>
         <Text style={styles.topText}>Tela Inicial</Text>
       </View>
 
       <Text style={styles.label}>Como você está se sentindo agora?</Text>
 
-      {/* Caixa com borda verde envolvendo os emojis */}
+      
       <View style={styles.emojiBox}>
         {emojis.map((emoji, index) => (
           <TouchableOpacity key={index} onPress={() => setHumorAtual(emoji)}>
