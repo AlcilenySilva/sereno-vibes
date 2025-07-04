@@ -7,6 +7,7 @@ import { View, Text } from 'react-native';
 import BoasVindas from './boasvindas';
 import Login from './login';
 import Principal from './principal';
+import Encaminhamento from './encaminhamento';
 
 // Telas fictícias temporárias só para testar os ícones
 function Historico() {
@@ -21,11 +22,7 @@ function Autocuidado() {
   );
 }
 
-function Encaminhamentos() {
-  return (
-    <View><Text>Encaminhamentos (teste)</Text></View>
-  );
-}
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -49,7 +46,7 @@ function Tabs() {
             return <Feather name="file-text" size={size} color={color} />;
           } else if (route.name === 'Autocuidado') {
             return <FontAwesome name="heart-o" size={size} color={color} />;
-          } else if (route.name === 'Encaminhamentos') {
+          } else if (route.name === 'Encaminhamento') {
             return <Feather name="message-square" size={size} color={color} />;
           }
         },
@@ -58,7 +55,7 @@ function Tabs() {
       <Tab.Screen name="Principal" component={Principal} />
       <Tab.Screen name="Historico" component={Historico} />
       <Tab.Screen name="Autocuidado" component={Autocuidado} />
-      <Tab.Screen name="Encaminhamentos" component={Encaminhamentos} />
+      <Tab.Screen name="Encaminhamento" component={Encaminhamento} />
     </Tab.Navigator>
   );
 }
