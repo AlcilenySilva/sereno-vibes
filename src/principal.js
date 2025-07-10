@@ -7,7 +7,7 @@ export default function Principal({ navigation }) {
 
   const emojis = [
   { icone: '😄', nome: 'Feliz' },
-  { icone: '🙂', nome: 'Bem' },
+  { icone: '🙂', nome: 'Tranquilo' },
   { icone: '😐', nome: 'Neutro' },
   { icone: '😕', nome: 'Ansioso' },
   { icone: '😣', nome: 'Estressado' },
@@ -18,7 +18,7 @@ export default function Principal({ navigation }) {
     <View style={styles.container}>
      
       <View style={styles.topBar}>
-        <Text style={styles.topText}>Tela Inicial</Text>
+       
       </View>
 
       <Text style={styles.label}>Como você está se sentindo agora?</Text>
@@ -55,6 +55,7 @@ export default function Principal({ navigation }) {
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -72,11 +73,7 @@ topBar: {
   right: 0,
   zIndex: 1,
 },
-topText: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  color: '#6C41F2',
-},
+
 container: {
   flex: 1,
   backgroundColor: '#fff',

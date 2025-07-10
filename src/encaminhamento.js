@@ -5,7 +5,7 @@ export default function Encaminhamentos() {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Text style={styles.topText}>Encaminhamentos</Text>
+       
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -45,14 +45,9 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
+    
   },
-  topText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#6C41F2',
-  },
+ 
   scrollContent: {
     padding: 16,
     paddingBottom: 40,
