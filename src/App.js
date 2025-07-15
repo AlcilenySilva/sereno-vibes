@@ -9,6 +9,7 @@ import Login from './login';
 import Principal from './principal';
 import Encaminhamento from './encaminhamento';
 import Autocuidado from './autocuidado';
+import Diario from './diario';
 // Telas fictícias temporárias só para testar os ícones
 function Historico() {
   return (
@@ -60,11 +61,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="BoasVindas">
-        <Stack.Screen name="BoasVindas" component={BoasVindas} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
-         <Stack.Screen name="autocuidado" component={Tabs} options={{ headerShown: false }} />
-      </Stack.Navigator>
+  <Stack.Screen name="BoasVindas" component={BoasVindas} options={{ headerShown: false }} />
+  <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+  <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+  <Stack.Screen name="Diario" component={Diario} options={{ headerShown: false }} />  
+    </Stack.Navigator>
     </NavigationContainer>
   );
 }
