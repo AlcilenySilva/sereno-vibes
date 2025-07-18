@@ -4,8 +4,8 @@ import { Feather, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons
 
 export default function Diario() {
   const [descricao, setDescricao] = useState('');
-  const [reacao, setReacao] = useState('');
-  const [envolvidos, setEnvolvidos] = useState('');
+  const [reacoesSelecionadas, setReacoesSelecionadas] = useState([]);
+  const [envolvidosSelecionados, setEnvolvidosSelecionados] = useState([]);
   const [acao, setAcao] = useState('');
 
   const opcoesLidar = [
@@ -16,10 +16,24 @@ export default function Diario() {
     { nome: 'Não se aplica', icon: <Feather name="x-circle" size={18} color="#000" /> },
   ];
 
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.topBar}></View>
+  const opcoesPessoas = ['Família', 'Amigos', 'Colegas', 'Estranhos', 'Só', 'Outros'];
 
+  const toggleReacao = (nome) => {
+    setReacoesSelecionadas(prev =>
+      prev.includes(nome) ? prev.filter(item => item !== nome) : [...prev, nome]
+    );
+  };
+
+  const toggleEnvolvido = (nome) => {
+    setEnvolvidosSelecionados(prev =>
+      prev.includes(nome) ? prev.filter(item => item !== nome) : [...prev, nome]
+    );
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+    <View style={styles.topBar} />
+    <ScrollView style={styles.container}>
       <Text style={styles.label}>O que aconteceu hoje que te deixou estressado(a)?</Text>
       <TextInput
         placeholder="Caixa de texto"
@@ -28,34 +42,57 @@ export default function Diario() {
         style={styles.textArea}
         multiline
       />
-
       <Text style={styles.label}>Como você conseguiu lidar com essa situação?</Text>
       <View style={styles.buttonGroup}>
-        {opcoesLidar.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[styles.botao, reacao === item.nome && styles.selecionado]}
-            onPress={() => setReacao(item.nome)}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {item.icon}
-              <Text style={{ marginLeft: 6 }}>{item.nome}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        {opcoesLidar.map((item, index) => {
+          const isSelecionado = reacoesSelecionadas.includes(item.nome);
+          return (
+            <TouchableOpacity
+              key={index}
+             style={[
+             styles.botao,
+       {
+         backgroundColor: isSelecionado ? '#4985c1ff' : '#A7C7E7', 
+         elevation: isSelecionado ? 2 : 0,
+  }
+]}
+              onPress={() => toggleReacao(item.nome)}
+            >
+              <View style={{ alignItems: 'center' }}>
+                {item.icon}
+                <Text style={{ marginTop: 4 }}>{item.nome}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
-      <Text style={styles.label}>Pessoas envolvidas ?</Text>
+      <Text style={styles.label}>Pessoas envolvidas?</Text>
       <View style={styles.buttonGroup}>
-        {['Família', 'Amigos', 'Colegas', 'Estranhos', 'Só', 'Outros'].map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[styles.botao, envolvidos === item && styles.selecionado]}
-            onPress={() => setEnvolvidos(item)}
-          >
-            <Text>{item}</Text>
-          </TouchableOpacity>
-        ))}
+        {opcoesPessoas.map((item, index) => {
+          const isSelecionado = envolvidosSelecionados.includes(item);
+          const isVerde = ['Família', 'Colegas', 'Outros'].includes(item);
+
+          const corNormal = isVerde ? '#A8E6CF' : '#D4E8F5';
+          const corSelecionado = isVerde ? '#50C9A6' : '#71B1D6';
+
+          return (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.botao,
+                {
+                  backgroundColor: isSelecionado ? corSelecionado : corNormal,
+                  borderWidth: isSelecionado ? 1.5 : 0,
+                  borderColor: isSelecionado ? '#333' : 'transparent',
+                }
+              ]}
+              onPress={() => toggleEnvolvido(item)}
+            >
+              <Text>{item}</Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
       <Text style={styles.label}>O que você fez para se sentir melhor?</Text>
@@ -70,64 +107,69 @@ export default function Diario() {
         <Text style={styles.saveButtonText}>Salvar</Text>
       </TouchableOpacity>
     </ScrollView>
+     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
-    padding: 16,
+    backgroundColor: '#FFF6F6',
+    paddingHorizontal: 16,
+    paddingTop: 0,
   },
-  topBar: {
-    backgroundColor: '#D6C3F6',
-    height: 50,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    marginBottom: 16,
-  },
+topBar: {
+  backgroundColor: '#D6C3F6',
+  height: 40,
+  width: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingHorizontal: 16,
+  marginBottom: 10,
+},
+
   label: {
     fontSize: 15,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    marginTop: 12,
+    fontWeight: '600',
+    marginBottom: 10,
   },
   textArea: {
-    backgroundColor: '#FADCDC',
+    backgroundColor: '#FADDDD',
+    borderRadius: 10,
     padding: 10,
-    borderRadius: 8,
-    height: 90,
-    marginBottom: 12,
+    marginBottom: 20,
+    textAlignVertical: 'top',
+    minHeight: 80,
+  },
+  input: {
+    backgroundColor: '#EDF3F3',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
   },
   buttonGroup: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-    marginBottom: 12,
+    gap: 10,
+    marginBottom: 20,
   },
   botao: {
-    backgroundColor: '#D6EAF8',
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderRadius: 10,
-  },
-  selecionado: {
-    backgroundColor: '#AFCDEB',
-  },
-  input: {
-    backgroundColor: '#EAF1F4',
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 100,
   },
   saveButton: {
-    backgroundColor: '#C1A6F5',
-    padding: 14,
-    borderRadius: 12,
-    marginTop: 20,
+    backgroundColor: '#C5AAF8',
+    padding: 16,
+    borderRadius: 10,
     alignItems: 'center',
+    marginBottom: 30,
   },
   saveButtonText: {
-    color: '#fff',
     fontWeight: 'bold',
+    color: '#fff',
+    fontSize: 16,
   },
 });

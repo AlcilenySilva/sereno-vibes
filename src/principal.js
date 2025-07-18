@@ -23,7 +23,7 @@ export default function Principal({ navigation }) {
 
       <Text style={styles.label}>Como você está se sentindo agora?</Text>
 
-     {/* Caixa com borda verde envolvendo os emojis */}
+    
       <View style={styles.emojiBox}>
    {emojis.map((item, index) => (
     <TouchableOpacity
