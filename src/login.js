@@ -6,8 +6,15 @@ export default function Login({ navigation }) {
   const [senha, setSenha] = useState('');
 
   const handleLogin = () => {
-  console.log('Login:', email, senha);
-  navigation.navigate('Tabs'); 
+  if (email.trim() && senha.trim()) {
+    console.log('Login:', email, senha);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Tabs' }],
+    });
+  } else {
+    alert('Preencha email e senha');
+  }
 };
 
   const handleCadastro = () => {

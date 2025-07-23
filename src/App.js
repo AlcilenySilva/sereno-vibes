@@ -1,8 +1,9 @@
+import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, FontAwesome } from '@expo/vector-icons';
-import { View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import BoasVindas from './boasvindas';
 import Login from './login';
@@ -16,10 +17,6 @@ function Historico() {
     <View><Text>Histórico (teste)</Text></View>
   );
 }
-
-
-
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,7 +47,7 @@ function Tabs() {
       })}
     >
       <Tab.Screen name="Principal" component={Principal} />
-      <Tab.Screen name="Historico" component={Historico} />
+   
       <Tab.Screen name="Autocuidado" component={Autocuidado} />
       <Tab.Screen name="Encaminhamento" component={Encaminhamento} />
     </Tab.Navigator>
@@ -60,12 +57,14 @@ function Tabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="BoasVindas">
-  <Stack.Screen name="BoasVindas" component={BoasVindas} options={{ headerShown: false }} />
-  <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-  <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
-  <Stack.Screen name="Diario" component={Diario} options={{ headerShown: false }} />  
-    </Stack.Navigator>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Stack.Navigator initialRouteName="BoasVindas">
+          <Stack.Screen name="BoasVindas" component={BoasVindas} options={{ headerShown: false }} />
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+          <Stack.Screen name="Diario" component={Diario} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </SafeAreaView>
     </NavigationContainer>
   );
 }
