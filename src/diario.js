@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform,
+import {View,Text,StyleSheet,TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Alert
 } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db, auth } from './firebaseConfig';
 
 export default function Diario() {
+   console.log('Instância do Firestore (db):', db);
   const [descricao, setDescricao] = useState('');
   const [reacoesSelecionadas, setReacoesSelecionadas] = useState([]);
   const [envolvidosSelecionados, setEnvolvidosSelecionados] = useState([]);
@@ -30,6 +33,52 @@ export default function Diario() {
       prev.includes(nome) ? prev.filter((item) => item !== nome) : [...prev, nome]
     );
   };
+
+  const salvarDiario = async () => {
+  // Use a instância 'auth' que já foi importada
+  const user = auth.currentUser;
+
+  // Adicione esta verificação para garantir que o 'db' está pronto
+  if (!db) {
+    console.error("Erro: Instância do Firestore (db) não está disponível.");
+    Alert.alert("Erro", "A conexão com o banco de dados falhou. Tente reiniciar o app.");
+    return;
+  }
+
+  if (!user) {
+    Alert.alert("Erro", "Usuário não autenticado.");
+    return;
+  }
+
+  if (!descricao.trim()) {
+    Alert.alert("Aviso", "Descreva o que aconteceu.");
+    return;
+  }
+
+  try {
+    // A chamada 'collection(db, 'diarios')' está correta
+    await addDoc(collection(db, 'diarios'), {
+      userId: user.uid,
+      descricao,
+      formasDeLidar: reacoesSelecionadas,
+      pessoasEnvolvidas: envolvidosSelecionados,
+      acao,
+      data: serverTimestamp(),
+    });
+
+    Alert.alert("Diário salvo!", "Você está indo muito bem. Um passo de cada vez. 💜");
+    
+    // Limpa os campos
+    setDescricao('');
+    setReacoesSelecionadas([]);
+    setEnvolvidosSelecionados([]);
+    setAcao('');
+
+  } catch (error) {
+    console.error("Erro ao salvar diário:", error);
+    Alert.alert("Erro", "Não foi possível salvar. Tente novamente.");
+  }
+};
 
   return (
     <KeyboardAvoidingView
@@ -114,13 +163,14 @@ export default function Diario() {
           placeholderTextColor="#333"
         />
 
-        <TouchableOpacity style={styles.saveButton}>
+        <TouchableOpacity style={styles.saveButton} onPress={salvarDiario}>
           <Text style={styles.saveButtonText}>Salvar</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

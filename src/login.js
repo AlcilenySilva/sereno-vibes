@@ -1,67 +1,115 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useState } from 'react';
+import { Feather } from '@expo/vector-icons';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'; 
+import { auth } from './firebaseConfig';  
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [error, setError] = useState(null); 
+  const [senhaVisivel, setSenhaVisivel] = useState(false);
+  
+  const handleLogin = async () => {
+    setError(null); 
+    if (email.trim() && senha.trim()) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+        console.log('Login bem-sucedido!', userCredential.user.uid);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Tabs' }],
+        });
+      } catch (e) {
+        console.error('Erro de login:', e.message);
+        setError(e.message); 
+      }
+    } else {
+      setError('Preencha email e senha');
+    }
+  };
 
-  const handleLogin = () => {
-  if (email.trim() && senha.trim()) {
-    console.log('Login:', email, senha);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Tabs' }],
-    });
-  } else {
-    alert('Preencha email e senha');
-  }
-};
-
-  const handleCadastro = () => {
-    console.log('Cadastro');
+  const handleCadastro = async () => {
+    setError(null);
+    if (email.trim() && senha.trim()) {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+        console.log('Cadastro bem-sucedido!', userCredential.user.uid);
+        alert('Usuário cadastrado com sucesso!');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Tabs' }],
+        });
+      } catch (e) {
+        console.error('Erro de cadastro:', e.message);
+        setError(e.message);
+      }
+    } else {
+      setError('Preencha email e senha para o cadastro');
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.logo}>Sereno vibes</Text>
-        <Text style={styles.bemVindo}>Bem Vindo (a)</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.content}>
+          <Text style={styles.logo}>Sereno vibes</Text>
+          <Text style={styles.bemVindo}>Bem Vindo (a)</Text>
 
-        <View style={styles.card}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#555"
-            onChangeText={setEmail}
-            value={email}
-          />
+          <View style={styles.card}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="#555"
+              onChangeText={setEmail}
+              value={email}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Senha"
-            placeholderTextColor="#555"
-            secureTextEntry
-            onChangeText={setSenha}
-            value={senha}
-          />
+            <View style={styles.senhaWrapper}>
+              <TextInput
+                style={styles.input}
+                placeholder="Senha"
+                placeholderTextColor="#555"
+                secureTextEntry={!senhaVisivel}
+                onChangeText={setSenha}
+                value={senha}
+              />
+              <TouchableOpacity
+                onPress={() => setSenhaVisivel(!senhaVisivel)}
+                style={styles.iconSenha}
+              >
+                <Feather name={senhaVisivel ? 'eye-off' : 'eye'} size={20} color="#333" />
+              </TouchableOpacity>
+            </View>
 
-          <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.botao} onPress={handleCadastro}>
-              <Text style={styles.botaoTexto}>Cadastro</Text>
-            </TouchableOpacity>
+            {error && <Text style={styles.errorText}>{error}</Text>}
 
-            <TouchableOpacity style={styles.botao} onPress={handleLogin}>
-              <Text style={styles.botaoTexto}>Entrar</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity style={styles.botao} onPress={handleCadastro}>
+                <Text style={styles.botaoTexto}>Cadastro</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.botao} onPress={handleLogin}>
+                <Text style={styles.botaoTexto}>Entrar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
-
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -113,6 +161,20 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: 'bold',
   },
+  errorText: { 
+    color: 'red',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  senhaWrapper: {
+  width: '100%',
+  position: 'relative',
+  justifyContent: 'center',
+},
+iconSenha: {
+  position: 'absolute',
+  right: 15,
+  top: 16,
+},
+
 });
-
-

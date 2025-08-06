@@ -15,7 +15,7 @@ export default function Principal({ navigation }) {
 ];
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}>7
      
       <View style={styles.topBar}>
        

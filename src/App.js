@@ -8,15 +8,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import BoasVindas from './boasvindas';
 import Login from './login';
 import Principal from './principal';
+import Historico from './historico';
 import Encaminhamento from './encaminhamento';
 import Autocuidado from './autocuidado';
 import Diario from './diario';
-// Telas fictícias temporárias só para testar os ícones
-function Historico() {
-  return (
-    <View><Text>Histórico (teste)</Text></View>
-  );
-}
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -47,7 +43,7 @@ function Tabs() {
       })}
     >
       <Tab.Screen name="Principal" component={Principal} />
-   
+      <Tab.Screen name="Historico" component={Historico} />
       <Tab.Screen name="Autocuidado" component={Autocuidado} />
       <Tab.Screen name="Encaminhamento" component={Encaminhamento} />
     </Tab.Navigator>
