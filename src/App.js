@@ -3,7 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, FontAwesome } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 import BoasVindas from './boasvindas';
 import Login from './login';
@@ -12,7 +13,6 @@ import Historico from './historico';
 import Encaminhamento from './encaminhamento';
 import Autocuidado from './autocuidado';
 import Diario from './diario';
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -43,7 +43,7 @@ function Tabs() {
       })}
     >
       <Tab.Screen name="Principal" component={Principal} />
-      <Tab.Screen name="Historico" component={Historico} />
+      <Tab.Screen name="Historico" component={Historico} />
       <Tab.Screen name="Autocuidado" component={Autocuidado} />
       <Tab.Screen name="Encaminhamento" component={Encaminhamento} />
     </Tab.Navigator>
