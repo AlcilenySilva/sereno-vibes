@@ -12,7 +12,7 @@ export default function BoasVindas({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.texto}>Sereno vibes</Text>
+      <Text style={styles.texto}>Sereno Vibes</Text>
     </View>
   );
 }

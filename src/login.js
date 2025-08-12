@@ -59,7 +59,7 @@ export default function Login({ navigation }) {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
-          <Text style={styles.logo}>Sereno vibes</Text>
+          <Text style={styles.logo}>Sereno Vibes</Text>
           <Text style={styles.bemVindo}>Bem Vindo (a)</Text>
 
           <View style={styles.card}>

@@ -35,10 +35,10 @@ export default function Diario() {
   };
 
   const salvarDiario = async () => {
-  // Use a instância 'auth' que já foi importada
+  
   const user = auth.currentUser;
 
-  // Adicione esta verificação para garantir que o 'db' está pronto
+  
   if (!db) {
     console.error("Erro: Instância do Firestore (db) não está disponível.");
     Alert.alert("Erro", "A conexão com o banco de dados falhou. Tente reiniciar o app.");
@@ -56,7 +56,7 @@ export default function Diario() {
   }
 
   try {
-    // A chamada 'collection(db, 'diarios')' está correta
+    
     await addDoc(collection(db, 'diarios'), {
       userId: user.uid,
       descricao,
@@ -68,7 +68,7 @@ export default function Diario() {
 
     Alert.alert("Diário salvo!", "Você está indo muito bem. Um passo de cada vez. 💜");
     
-    // Limpa os campos
+    
     setDescricao('');
     setReacoesSelecionadas([]);
     setEnvolvidosSelecionados([]);
