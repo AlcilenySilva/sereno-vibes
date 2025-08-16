@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import {View,Text,TouchableOpacity,StyleSheet, ScrollView, TextInput, KeyboardAvoidingView, Platform,
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, KeyboardAvoidingView, Platform, Alert 
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 const atividades = [
   'Fazer uma caminhada',
@@ -15,23 +16,82 @@ export default function Autocuidado() {
   const [atividadesPersonalizadas, setAtividadesPersonalizadas] = useState([]);
   const [atividadeAtual, setAtividadeAtual] = useState('');
 
-  const toggleAtividade = (item) => {
-    if (selecionadas.includes(item)) {
-      setSelecionadas(selecionadas.filter((a) => a !== item));
-    } else {
-      setSelecionadas([...selecionadas, item]);
+
+  const SELECTED_ACTIVITIES_KEY = 'selected_autocuidado_activities';
+  const CUSTOM_ACTIVITIES_KEY = 'custom_autocuidado_activities';
+
+  
+  const loadSelecionadas = async () => {
+    try {
+      const storedActivities = await AsyncStorage.getItem(SELECTED_ACTIVITIES_KEY);
+      if (storedActivities !== null) {
+        setSelecionadas(JSON.parse(storedActivities));
+      }
+    } catch (error) {
+      console.error("Erro ao carregar atividades selecionadas:", error);
+      Alert.alert("Erro", "Não foi possível carregar as atividades selecionadas.");
     }
   };
 
+  const loadPersonalizadas = async () => {
+    try {
+      const storedCustomActivities = await AsyncStorage.getItem(CUSTOM_ACTIVITIES_KEY);
+      if (storedCustomActivities !== null) {
+        setAtividadesPersonalizadas(JSON.parse(storedCustomActivities));
+      }
+    } catch (error) {
+      console.error("Erro ao carregar atividades personalizadas:", error);
+      Alert.alert("Erro", "Não foi possível carregar as atividades personalizadas.");
+    }
+  };
+
+
+  const saveSelecionadas = async (currentSelection) => {
+    try {
+      await AsyncStorage.setItem(SELECTED_ACTIVITIES_KEY, JSON.stringify(currentSelection));
+    } catch (error) {
+      console.error("Erro ao salvar atividades selecionadas:", error);
+      Alert.alert("Erro", "Não foi possível salvar as atividades selecionadas.");
+    }
+  };
+
+  const savePersonalizadas = async (currentCustomActivities) => {
+    try {
+      await AsyncStorage.setItem(CUSTOM_ACTIVITIES_KEY, JSON.stringify(currentCustomActivities));
+    } catch (error) {
+      console.error("Erro ao salvar atividades personalizadas:", error);
+      Alert.alert("Erro", "Não foi possível salvar as atividades personalizadas.");
+    }
+  };
+
+
+  useEffect(() => {
+    loadSelecionadas();
+    loadPersonalizadas();
+  }, []);
+
+
+  const toggleAtividade = (item) => {
+    const newSelecionadas = selecionadas.includes(item)
+      ? selecionadas.filter((a) => a !== item)
+      : [...selecionadas, item];
+    setSelecionadas(newSelecionadas);
+    saveSelecionadas(newSelecionadas); 
+  };
+
   const togglePersonalizada = (item) => {
-    setAtividadesPersonalizadas((prev) =>
-      prev.includes(item) ? prev.filter((a) => a !== item) : [...prev, item]
-    );
+    const newPersonalizadas = atividadesPersonalizadas.includes(item)
+      ? atividadesPersonalizadas.filter((a) => a !== item)
+      : [...atividadesPersonalizadas, item];
+    setAtividadesPersonalizadas(newPersonalizadas);
+    savePersonalizadas(newPersonalizadas); 
   };
 
   const adicionarAtividade = () => {
     if (atividadeAtual.trim() !== '') {
-      setAtividadesPersonalizadas([...atividadesPersonalizadas, atividadeAtual.trim()]);
+      const newPersonalizadas = [...atividadesPersonalizadas, atividadeAtual.trim()];
+      setAtividadesPersonalizadas(newPersonalizadas);
+      savePersonalizadas(newPersonalizadas); 
       setAtividadeAtual('');
     }
   };

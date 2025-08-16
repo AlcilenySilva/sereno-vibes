@@ -31,7 +31,7 @@ export default function Historico() {
   const [loading, setLoading] = useState(true);
   const [diarios, setDiarios] = useState([]);
   const [humoresData, setHumoresData] = useState([]);
-  const [registrosVisiveis, setRegistrosVisiveis] = useState(2); // Começa mostrando 2 registros
+  const [registrosVisiveis, setRegistrosVisiveis] = useState(2); 
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -79,18 +79,18 @@ export default function Historico() {
   }, []);
 
   const verMaisRegistros = () => {
-    setRegistrosVisiveis(diarios.length); // Mostra todos os registros
+    setRegistrosVisiveis(diarios.length);
   };
 
   const ocultarRegistros = () => {
-    setRegistrosVisiveis(2); // Volta a mostrar apenas os 2 primeiros registros
+    setRegistrosVisiveis(2);
   };
 
   const renderItem = ({ item }) => {
     const dataFormatada = item.data ? format(item.data.toDate(), 'dd/MM/yyyy', { locale: ptBR }) : 'Data Indisponível';
     
     const humorCorresp = humoresData.find(h => 
-        item.data && h.data && h.data.toDate().getTime() === item.data.toDate().getTime()
+      item.data && h.data && h.data.toDate().getTime() === item.data.toDate().getTime()
     );
     const emoji = humorCorresp ? humorParaEmoji[humorCorresp.emocao] : null;
 
@@ -119,8 +119,8 @@ export default function Historico() {
   const dataGrafico = humoresData.map(h => humorParaValor[h.emocao] || 0);
   
   const chartData = {
-      labels: labelsGrafico,
-      datasets: [{ data: dataGrafico }],
+    labels: labelsGrafico,
+    datasets: [{ data: dataGrafico }],
   };
 
   const chartConfig = {
@@ -155,10 +155,13 @@ export default function Historico() {
             <>
               <LineChart
                 data={chartData}
-                width={screenWidth - 48}
+                width={screenWidth}
                 height={220}
                 chartConfig={chartConfig}
                 bezier
+                style={{
+                  marginLeft: -24, 
+                }}
                 renderDotContent={({ x, y, index, indexData }) => {
                   const emoji = humorParaEmoji[humoresData[index]?.emocao];
                   if (!emoji) return null;
@@ -218,18 +221,26 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     padding: 24,
-    paddingTop: 15,
+    paddingTop: 10,
   },
-  topBar: {
+   topBar: {
     backgroundColor: '#D6C3F6',
-    height: 32
-   
+    paddingVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+    borderBottomLeftRadius: 25, 
+    borderBottomRightRadius: 25,
   },
   titulo: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    marginTop: 20,
+    marginTop: 50,
   },
   center: {
     justifyContent: 'center',
@@ -293,4 +304,4 @@ const styles = StyleSheet.create({
   lista: {
     marginBottom: 10,
   }
-});
+});   

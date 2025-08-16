@@ -40,17 +40,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  
   topBar: {
     backgroundColor: '#D6C3F6',
-    paddingVertical: 16,
+    paddingVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+    borderBottomLeftRadius: 25, 
+    borderBottomRightRadius: 25,
   },
  
   scrollContent: {
     padding: 16,
     paddingBottom: 40,
+    paddingTop:60,
   },
   card: {
     borderWidth: 1,

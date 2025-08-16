@@ -156,9 +156,10 @@ const styles = StyleSheet.create({
     paddingTop: 60, 
     paddingHorizontal: 24,
   },
+  
   topBar: {
     backgroundColor: '#D6C3F6',
-    paddingVertical: 16,
+    paddingVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
@@ -166,7 +167,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 1,
+    borderBottomLeftRadius: 25, 
+    borderBottomRightRadius: 25,
   },
+
   label: {
     fontSize: 16,
     fontWeight: '600',
