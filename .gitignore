@@ -36,5 +36,3 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# Arquivo de configuração sensível
-src/firebaseConfig.js
