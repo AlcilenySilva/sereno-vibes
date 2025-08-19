@@ -1,8 +1,9 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'; 
-import { auth } from './firebaseConfig';  
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { auth } from './firebaseConfig'; 
+import emailValidator from 'email-validator'; 
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -10,42 +11,82 @@ export default function Login({ navigation }) {
   const [error, setError] = useState(null); 
   const [senhaVisivel, setSenhaVisivel] = useState(false);
   
+  
   const handleLogin = async () => {
     setError(null); 
     if (email.trim() && senha.trim()) {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-        console.log('Login bem-sucedido!', userCredential.user.uid);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Tabs' }],
-        });
+        const user = userCredential.user;
+
+        
+        if (user.emailVerified) {
+          console.log('Login bem-sucedido!', user.uid);
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Tabs' }],
+          });
+        } else {
+          
+          await auth.signOut();
+          setError('Por favor, verifique seu e-mail para ativar sua conta.');
+        }
+
       } catch (e) {
-        console.error('Erro de login:', e.message);
-        setError(e.message); 
+        console.error('Erro de login:', e.code, e.message);
+        
+        if (e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
+          setError('E-mail ou senha inválidos. Verifique suas credenciais.');
+        } else if (e.code === 'auth/invalid-email') {
+          setError('O formato do e-mail é inválido.');
+        } else {
+          setError('Ocorreu um erro no login. Tente novamente mais tarde.');
+        }
       }
     } else {
-      setError('Preencha email e senha');
+      setError('Preencha e-mail e senha.');
     }
   };
 
+ 
   const handleCadastro = async () => {
     setError(null);
     if (email.trim() && senha.trim()) {
+     
+      if (!emailValidator.validate(email)) {
+        setError('Por favor, insira um e-mail válido.');
+        return; 
+      }
+
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-        console.log('Cadastro bem-sucedido!', userCredential.user.uid);
-        alert('Usuário cadastrado com sucesso!');
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Tabs' }],
-        });
+        const user = userCredential.user;
+
+       
+        await sendEmailVerification(user);
+
+        console.log('Cadastro bem-sucedido!', user.uid);
+      
+        alert('Usuário cadastrado com sucesso! Por favor, verifique seu e-mail para ativar sua conta.');
+
+       
+
       } catch (e) {
-        console.error('Erro de cadastro:', e.message);
-        setError(e.message);
+        console.error('Erro de cadastro:', e.code, e.message);
+        
+        if (e.code === 'auth/email-already-in-use') {
+          setError('Este e-mail já está em uso. Tente fazer login.');
+        } else if (e.code === 'auth/weak-password') {
+          setError('A senha deve ter pelo menos 6 caracteres.');
+        } else if (e.code === 'auth/invalid-email') {
+          setError('O formato do e-mail é inválido.');
+        }
+        else {
+          setError('Erro ao cadastrar. Verifique as informações e tente novamente.');
+        }
       }
     } else {
-      setError('Preencha email e senha para o cadastro');
+      setError('Preencha e-mail e senha para o cadastro.');
     }
   };
 
