@@ -1,10 +1,11 @@
-import { View, Text } from 'react-native';
+import { View, Text , Platform} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
+
 
 import BoasVindas from './boasvindas';
 import Login from './login';
@@ -51,16 +52,19 @@ function Tabs() {
 }
 
 export default function App() {
+  const content = (
+    <Stack.Navigator initialRouteName="BoasVindas">
+      <Stack.Screen name="BoasVindas" component={BoasVindas} options={{ headerShown: false }} />
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+      <Stack.Screen name="Diario" component={Diario} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+
   return (
     <NavigationContainer>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Stack.Navigator initialRouteName="BoasVindas">
-          <Stack.Screen name="BoasVindas" component={BoasVindas} options={{ headerShown: false }} />
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
-          <Stack.Screen name="Diario" component={Diario} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </SafeAreaView>
+      {Platform.OS === 'web' ? <View style={{ flex: 1 }}>{content}</View> : <SafeAreaView style={{ flex: 1 }}>{content}</SafeAreaView>}
+      <Toast />
     </NavigationContainer>
   );
 }

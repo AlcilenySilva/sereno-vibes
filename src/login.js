@@ -19,9 +19,9 @@ export default function Login({ navigation }) {
   const [senhaVisivel, setSenhaVisivel] = useState(false);
   const [loading, setLoading] = useState(false); 
 
-  // Função auxiliar para validar formato de e-mail (regex)
+  
   const isValidEmail = (email) => {
-    // Regex para um formato de e-mail razoavelmente válido
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -58,7 +58,7 @@ export default function Login({ navigation }) {
     setLoading(true); 
     if (email.trim() && senha.trim()) {
       
-      // Validação de formato de e-mail: usa email-validator E uma regex própria
+      
       if (!emailValidator.validate(email) || !isValidEmail(email)) {
         setError('Por favor, insira um e-mail válido.');
         setLoading(false); 
@@ -79,12 +79,11 @@ export default function Login({ navigation }) {
         
         const user = auth.currentUser;
         if (user) {
-           // O e-mail de verificação ainda será enviado em segundo plano.
-           // Isso te permite rastrear quem verificou o e-mail no console do Firebase.
+           
            await sendEmailVerification(user);
            alert('Usuário cadastrado com sucesso! Um link de verificação foi enviado ao seu e-mail (verifique a caixa de spam).');
         } else {
-          alert('Usuário cadastrado com sucesso!'); // Fallback se, por algum motivo, user for null após cadastro
+          alert('Usuário cadastrado com sucesso!'); 
         }
         
         navigation.reset({
